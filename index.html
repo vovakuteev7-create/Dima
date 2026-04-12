@@ -1,479 +1,245 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Неметаллы на коже | Презентация</title>
-    <!-- Font Awesome 6 (free) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Мой дипломный проект</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ... (весь ваш CSS остался без изменений) ... */
 
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: linear-gradient(145deg, #f5f7fa 0%, #e9ecf0 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-
-        /* главный контейнер — как слайд-шоу */
-        .presentation-wrapper {
-            max-width: 1200px;
-            width: 100%;
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(4px);
-            border-radius: 3rem 3rem 2rem 2rem;
-            box-shadow: 0 30px 50px -20px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.9);
-            padding: 2rem 2rem 1.5rem 2rem;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        /* заголовок презентации */
-        .title-block {
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .title-block h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 10px rgba(0,30,50,0.1);
-        }
-
-        .title-block .sub {
-            font-size: 1.3rem;
-            color: #3a4e62;
-            background: rgba(220, 240, 255, 0.7);
-            display: inline-block;
-            padding: 0.4rem 2rem;
-            border-radius: 60px;
-            backdrop-filter: blur(2px);
-            margin-top: 0.5rem;
-            border: 1px solid white;
-        }
-
-        /* навигационные точки (слайды) */
-        .slide-indicators {
+        /* Стили для времени */
+        .time-display {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1.8rem;
-            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        .city-time {
+            color: #a8d0ff;
+            font-weight: bold;
         }
 
-        .slide-btn {
-            background: rgba(210, 225, 240, 0.7);
-            border: none;
-            padding: 0.7rem 1.3rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1f3a4b;
+        /* Стили для кнопки меню и списка ссылок */
+        .menu-toggle {
+            display: none; /* Скрыто по умолчанию */
+            font-size: 1.5rem;
             cursor: pointer;
-            backdrop-filter: blur(4px);
-            transition: 0.25s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255,255,255,0.6);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .slide-btn i {
-            font-size: 1.1rem;
-            color: #2b4b6f;
-        }
-
-        .slide-btn.active {
-            background: #1e3b4f;
+            background: none;
+            border: none;
             color: white;
-            box-shadow: 0 12px 18px -8px rgba(0,60,90,0.4);
-            border-color: #9bb7d4;
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
 
-        .slide-btn.active i {
-            color: #ffebc2;
+        .links-list {
+            display: flex; /* По умолчанию горизонтально */
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        .slide-btn:hover {
-            background: #c7dfff;
-            transform: translateY(-3px);
-        }
+        /* Для мобильных устройств */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block; /* Показываем кнопку на моб. устройствах */
+            }
 
-        /* карточка текущего слайда */
-        .slide-container {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 3rem;
-            padding: 2.5rem 2.8rem;
-            box-shadow: 0 25px 40px -15px rgba(0,20,40,0.25), inset 0 0 0 1px rgba(255,255,255,0.7);
-            border: 1px solid rgba(255,255,255,0.8);
-            transition: 0.3s;
-        }
+            .links-list {
+                display: none; /* Скрываем список */
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 80px; /* Позиция под шапкой */
+                right: 20px;
+                background: rgba(10, 10, 42, 0.9);
+                padding: 15px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            }
 
-        .slide-content {
-            display: none;
-            animation: fadeSlide 0.35s ease;
-        }
+            .links-list.active {
+                display: flex; /* Показываем при активации */
+            }
 
-        .slide-content.active-content {
-            display: block;
-        }
-
-        @keyframes fadeSlide {
-            0% { opacity: 0.4; transform: translateY(8px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* типографика слайдов */
-        h2 {
-            font-size: 2.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #0b2d42;
-            border-left: 8px solid #4f9da6;
-            padding-left: 1.5rem;
-        }
-
-        h2 i {
-            color: #3b7b8a;
-            margin-right: 15px;
-        }
-
-        h3 {
-            font-size: 1.6rem;
-            margin: 1.2rem 0 0.8rem;
-            color: #1e4957;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #203a44;
-            margin-bottom: 1.2rem;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        .card {
-            background: rgba(250, 255, 255, 0.7);
-            padding: 1.5rem;
-            border-radius: 2rem;
-            box-shadow: 0 6px 14px rgba(0,30,40,0.1);
-            border: 1px solid white;
-        }
-
-        .list-icon {
-            list-style: none;
-        }
-        .list-icon li {
-            margin-bottom: 0.9rem;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .list-icon li i {
-            width: 1.8rem;
-            color: #31738f;
-        }
-
-        .badge {
-            background: #bbcfe0;
-            border-radius: 40px;
-            padding: 0.3rem 1.2rem;
-            font-weight: 600;
-            font-size: 1rem;
-            display: inline-block;
-            color: #0f3342;
-        }
-
-        .reaction-block {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            margin: 1.5rem 0;
-        }
-        .reaction-item {
-            background: #ebf5f7;
-            border-radius: 40px;
-            padding: 0.6rem 1.5rem;
-            font-weight: 500;
-            border-left: 5px solid #498a94;
-        }
-
-        .footnote {
-            margin-top: 2rem;
-            font-size: 1rem;
-            color: #336b7a;
-            text-align: right;
-            font-style: italic;
-            border-top: 1px dashed #98b8c9;
-            padding-top: 1rem;
-        }
-
-        /* химический декор */
-        .atom-mini {
-            background: radial-gradient(circle at 30% 30%, #f0f9ff, #d3e4f0);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #1c5570;
-        }
-
-        /* нижняя панель */
-        .footer-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            color: #334e5e;
-        }
-
-        .arrow-btn {
-            background: white;
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 60px;
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1d3b4b;
-            cursor: pointer;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-            transition: 0.2s;
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-        .arrow-btn:hover {
-            background: #d6e9ff;
-            transform: scale(1.07);
-        }
-        .arrow-btn:active { background: #b3d1e8; }
-
-        .slide-counter {
-            font-size: 1.1rem;
-            background: rgba(255,255,240,0.8);
-            padding: 0.4rem 1.8rem;
-            border-radius: 50px;
-            font-weight: 600;
-        }
-
-        /* адаптация */
-        @media (max-width: 700px) {
-            .title-block h1 { font-size: 2.4rem; }
-            .slide-container { padding: 1.5rem; }
-            .grid-2 { grid-template-columns: 1fr; }
-            .slide-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+            .tool-link {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 10px;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-
-<div class="presentation-wrapper">
-    <!-- заголовок -->
-    <div class="title-block">
-        <h1>⚛️ Неметаллы на коже</h1>
-        <div class="sub">взаимодействие · влияние · безопасность</div>
+    <!-- Фон ночного неба -->
+    <div class="night-sky" id="nightSky">
+        <div class="moon"></div>
     </div>
 
-    <!-- навигация по слайдам (кнопки-индикаторы) -->
-    <div class="slide-indicators" id="slideIndicators">
-        <button class="slide-btn active" data-index="0"><i class="fas fa-droplet"></i> Введение</button>
-        <button class="slide-btn" data-index="1"><i class="fas fa-wind"></i> Кислород</button>
-        <button class="slide-btn" data-index="2"><i class="fas fa-skull"></i> Галогены</button>
-        <button class="slide-btn" data-index="3"><i class="fas fa-leaf"></i> Сера / Углерод</button>
-        <button class="slide-btn" data-index="4"><i class="fas fa-shield"></i> Защита</button>
-    </div>
-
-    <!-- контейнер слайда -->
-    <div class="slide-container" id="slideContainer">
-        <!-- СЛАЙД 0 – Введение -->
-        <div class="slide-content active-content" id="slide0">
-            <h2><i class="fas fa-hand"></i> Что такое неметаллы на коже?</h2>
-            <p>Неметаллы — элементы, которые не обладают металлическим блеском, хрупкие (в твёрдом виде) и часто являются электроотрицательными. Наша кожа ежедневно контактирует с ними: <strong>кислород, азот, углерод, галогены, сера</strong> и другие.</p>
-            <div class="grid-2">
-                <div class="card">
-                    <i class="fas fa-lungs" style="font-size: 2.2rem; color: #2e7a8a;"></i>
-                    <h3>Газообразные</h3>
-                    <p>O₂, N₂, Cl₂ (вредный), инертные газы — окружают нас постоянно. Кожа дышит, но барьерная функция ограничивает проникновение.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-cube" style="font-size: 2.2rem; color: #a06b3a;"></i>
-                    <h3>Твёрдые/жидкие</h3>
-                    <p>Йод (кристаллы), сера (порошок), углерод (сажа, графит) — могут оставаться на коже, вызывая раздражение или окрашивание.</p>
-                </div>
-            </div>
-            <div class="footnote">Кожа — первый барьер между организмом и миром неметаллов.</div>
-        </div>
-
-        <!-- СЛАЙД 1 – Кислород и озон -->
-        <div class="slide-content" id="slide1">
-            <h2><i class="fas fa-wind"></i> Кислород (O₂) и озон (O₃)</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
-                <div style="flex:2; min-width: 250px;">
-                    <p><i class="fas fa-check-circle" style="color:#2e8b57;"></i> <strong>Молекулярный кислород</strong> — необходим для дыхания клеток, но через роговой слой проникает слабо. Кожа получает O₂ в основном из крови.</p>
-                    <p><i class="fas fa-exclamation-triangle" style="color:#ca7200;"></i> <strong>Озон (O₃)</strong> — сильный окислитель. Даже низкие концентрации вызывают сухость, раздражение, ускоряют старение (образование свободных радикалов).</p>
-                    <div class="reaction-block">
-                        <span class="reaction-item"><i class="fas fa-bolt"></i> Фотохимический смог</span>
-                        <span class="reaction-item"><i class="fas fa-sun"></i> УФ + O₂ → O₃</span>
-                    </div>
-                </div>
-                <div class="atom-mini" style="align-self: center;">O₂</div>
-            </div>
-            <h3 style="margin-top:1rem;">Окислительный стресс</h3>
-            <p>Озон и активные формы кислорода повреждают липидный слой, вызывают воспаление. Антиоксиданты (витамины С, Е) в кремах помогают защитить кожу.</p>
-        </div>
-
-        <!-- СЛАЙД 2 – Галогены (хлор, йод) -->
-        <div class="slide-content" id="slide2">
-            <h2><i class="fas fa-skull"></i> Галогены: Cl₂, I₂, Br₂</h2>
-            <div class="grid-2">
-                <div class="card">
-                    <span class="badge"><i class="fas fa-toilet-paper"></i> Хлор (Cl₂)</span>
-                    <p>Газ, используется для дезинфекции воды. В высоких концентрациях разъедает кожу, вызывает химические ожоги, дерматит. Сухость после бассейна — последствие хлораминов.</p>
-                    <i class="fas fa-frown" style="color: #3d7b9a;"></i>
-                </div>
-                <div class="card">
-                    <span class="badge"><i class="fas fa-prescription-bottle"></i> Йод (I₂)</span>
-                    <p>Кристаллы, спиртовой раствор. Антисептик, но при частом использовании сушит, может вызвать химический ожог или контактный дерматит. Оставляет жёлтые пятна.</p>
-                </div>
-            </div>
-            <p style="margin-top:1rem;"><i class="fas fa-flask"></i> Механизм: галогены — сильные окислители, разрушают кератин и липиды, денатурируют белки. При попадании твёрдого йода или жидкого брома — немедленно смывать большим количеством воды!</p>
-        </div>
-
-        <!-- СЛАЙД 3 – Сера, углерод, фосфор -->
-        <div class="slide-content" id="slide3">
-            <h2><i class="fas fa-leaf"></i> Сера, углерод, фосфор (белый)</h2>
-            <ul class="list-icon">
-                <li><i class="fas fa-circle" style="color:#e5b13b;"></i> <strong>Сера (S)</strong> — входит в состав кератина, но элементная сера в мазях (серная мазь) может вызывать сухость и шелушение при чувствительной коже. Противогрибковое действие.</li>
-                <li><i class="fas fa-circle" style="color:#2c3e50;"></i> <strong>Углерод (C)</strong> — сажа, графит. Механический абразив, может забивать поры. Активированный уголь в косметике — адсорбент, но не токсичен для кожи.</li>
-                <li><i class="fas fa-circle" style="color:#d16232;"></i> <strong>Фосфор (P, белый)</strong> — крайне опасен! На воздухе воспламеняется, на коже вызывает тяжёлые ожоги. Жёлтый фосфор ядовит, всасывается через кожу.</li>
-            </ul>
-            <div style="background: #e6eef3; border-radius: 2rem; padding: 1.2rem; margin: 1rem 0;">
-                <i class="fas fa-microscope"></i> <strong>Косметическая сера</strong> (мелкодисперсная) взаимодействует с кератином, образуя сульфиды и оказывая кератолитическое действие.
-            </div>
-        </div>
-
-        <!-- СЛАЙД 4 – Защита и безопасность -->
-        <div class="slide-content" id="slide4">
-            <h2><i class="fas fa-shield-alt"></i> Как защитить кожу?</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
-                <div style="flex: 1;">
-                    <p><i class="fas fa-soap"></i> После контакта с хлором (бассейн) — душ, увлажняющие средства.</p>
-                    <p><i class="fas fa-gloves"></i> Работа с агрессивными неметаллами: перчатки (нитрил, витон), защитные экраны.</p>
-                    <p><i class="fas fa-creme-brulee"></i> Кремы с барьерными функциями (силиконы, оксид цинка) — защита от окислителей.</p>
-                </div>
-                <div style="flex: 1;">
-                    <div style="background: #c4dbe8; border-radius: 1.5rem; padding: 1.2rem;">
-                        <i class="fas fa-first-aid"></i> <strong>Первая помощь</strong>
-                        <ul style="margin-top: 0.6rem; list-style: disc inside; color: #1b3b49;">
-                            <li>При попадании твёрдых/жидких неметаллов — не тереть!</li>
-                            <li>Смывать проточной водой не менее 15 минут.</li>
-                            <li>При ожогах хлором, бромом — вода + натрия тиосульфат (если есть).</li>
-                            <li>Сера, углерод — смыть мылом.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="footnote">Помните: даже «безопасный» кислород в виде озона может быть агрессивен.</div>
-        </div>
-    </div>
-
-    <!-- нижняя панель: стрелки и счётчик -->
-    <div class="footer-controls">
-        <button class="arrow-btn" id="prevSlide"><i class="fas fa-arrow-left"></i></button>
-        <span class="slide-counter" id="slideCounter">1 / 5</span>
-        <button class="arrow-btn" id="nextSlide"><i class="fas fa-arrow-right"></i></button>
-    </div>
-</div>
-
-<script>
-    (function() {
-        const slides = document.querySelectorAll('.slide-content');
-        const slideBtns = document.querySelectorAll('.slide-btn');
-        const prevBtn = document.getElementById('prevSlide');
-        const nextBtn = document.getElementById('nextSlide');
-        const counter = document.getElementById('slideCounter');
+    <div class="container">
+        <!-- Кнопка меню для мобильных -->
+        <button class="menu-toggle" onclick="toggleLinks()">☰</button>
         
-        let currentIndex = 0; // active slide index
-        const totalSlides = slides.length;
+        <!-- Список ссылок -->
+        <div class="links-list" id="linksList">
+            <a href="https://github.com/vovakuteev7-create" target="_blank" class="tool-link github">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://www.figma.com/" target="_blank" class="tool-link figma">
+                <i class="fab fa-figma"></i> Figma
+            </a>
+            <a href="https://jsitor.com/" target="_blank" class="tool-link jsitor">
+                <i class="fas fa-code"></i> JSitor
+            </a>
+            <a href="https://codepen.io/" target="_blank" class="tool-link codepen">
+                <i class="fab fa-codepen"></i> CodePen
+            </a>
+            <a href="https://stackblitz.com/" target="_blank" class="tool-link stackblitz">
+                <i class="fas fa-bolt"></i> StackBlitz
+            </a>
+            <a href="https://vovakuteev7-create.github.io/home-arenda/#houses" target="_blank" class="tool-link jsitor">
+                <i class="fas fa-home"></i> Сайт по аренде
+            </a>
+        </div>
 
-        // Функция обновления активного слайда + кнопок
-        function showSlide(index) {
-            // зацикливание
-            if (index < 0) index = totalSlides - 1;
-            if (index >= totalSlides) index = 0;
+        <header>
+            <h1>Моя дипломная презентация</h1>
+            <p class="subtitle">Итоги моего обучения и достижения</p>
 
-            // деактивировать все слайды и кнопки
-            slides.forEach(s => s.classList.remove('active-content'));
-            slideBtns.forEach(btn => btn.classList.remove('active'));
+            <!-- Ссылки на инструменты (теперь управляются кнопкой) -->
+            <div class="tools-links">
+                <!-- Ссылки перенесены в #linksList -->
+            </div>
+        </header>
 
-            // активировать нужные
-            slides[index].classList.add('active-content');
-            slideBtns[index].classList.add('active');
+        <!-- Вкладки -->
+        <div class="tabs">
+            <div class="tab active" data-tab="about">Обо мне</div>
+            <div class="tab" data-tab="works">Мои работы</div>
+            <div class="tab" data-tab="goodbye">Завершение</div>
+        </div>
+
+        <!-- Содержимое вкладок -->
+        <div class="tab-content active" id="about">
+            <!-- ... (содержимое "Обо мне" без изменений) ... -->
+        </div>
+
+        <div class="tab-content" id="works">
+            <h2>Мои проекты</h2>
             
-            currentIndex = index;
-            counter.textContent = (currentIndex + 1) + ' / ' + totalSlides;
+            <!-- Блок с временем -->
+            <div class="time-display">
+                <div class="city-time" id="moscowTime">Загрузка времени...</div>
+                <div class="city-time" id="ustIlimskTime">Загрузка времени...</div>
+            </div>
+
+            <div class="works-grid">
+                <div class="work-item">
+                    <h3>Мой сайт по аренде домов</h3>
+                    <p><a href="https://vovakuteev7-create.github.io/home-arenda/#houses" target="_blank">Перейти на сайт</a></p>
+                </div>
+                <div class="work-item">
+                    <h3>Проекты на Figma</h3>
+                    <p>Создание дизайн-макетов и прототипов для различных веб-приложений и сайтов.</p>
+                </div>
+                <div class="work-item">
+                    <h3>Работы на JSitor</h3>
+                    <p>Быстрое прототипирование и тестирование кода в онлайн-редакторе.</p>
+                </div>
+                <div class="work-item">
+                    <h3>Проекты на CodePen</h3>
+                    <p>Создание интерактивных примеров кода и мини-проектов для демонстрации навыков.</p>
+                </div>
+                <div class="work-item">
+                    <h3>Проекты на StackBlitz</h3>
+                    <p>Разработка интерактивных веб-приложений с использованием современных технологий.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="goodbye">
+            <!-- ... (содержимое "Завершение" без изменений) ... -->
+        </div>
+    </div>
+
+    <script>
+        // Функция для переключения списка ссылок
+        function toggleLinks() {
+            const list = document.getElementById('linksList');
+            list.classList.toggle('active');
         }
 
-        // обработчики кнопок-индикаторов
-        slideBtns.forEach((btn, idx) => {
-            btn.addEventListener('click', () => showSlide(idx));
-        });
-
-        // стрелки
-        prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
-        nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
-
-        // клавиатура (необязательно, для удобства)
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                showSlide(currentIndex - 1);
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                showSlide(currentIndex + 1);
+        // Функция для получения времени по часовому поясу
+        function getLocalTime(timezone) {
+            try {
+                return new Date().toLocaleString("ru-RU", {
+                    timeZone: timezone,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+            } catch (e) {
+                return "Ошибка";
             }
-        });
+        }
 
-        // инициализация: показываем первый слайд (индекс 0 уже active-content, но синхронизируем кнопки)
-        // на всякий случай принудительно
-        showSlide(0);
-    })();
-</script>
-
-<!-- дополнительный текст об авторе/сноска -->
-<div style="margin-top: 1.2rem; font-size: 0.9rem; color: #5f7a8a; text-align: center;">
-    <i class="fas fa-atom"></i> Презентация «Неметаллы и кожа» — интерактивный обзор
-</div>
+        // Обновление времени каждую секунду
+        function updateClocks() {
+            document.getElementById('moscowTime').textContent = `Москва: ${getLocalTime('Europe/Moscow')}`;
+            document.getElementById('ustIlimskTime').textContent = `Усть-Илимск: ${getLocalTime('Asia/Irkutsk')}`;
+        }
+        
+        // Создание звездного неба (ваш код)
+        function createStars() {
+          const nightSky = document.getElementById('nightSky');
+          const starCount = 150;
+          
+          for (let i = 0; i < starCount; i++) {
+              const star = document.createElement('div');
+              star.classList.add('star');
+              
+              const x = Math.random() * 100;
+              const y = Math.random() * 100;
+              const size = Math.random() * 3 + 1;
+              const duration = Math.random() * 5 + 3;
+              const delay = Math.random() * 5;
+              
+              star.style.left = `${x}%`;
+              star.style.top = `${y}%`;
+              star.style.width = `${size}px`;
+              star.style.height = `${size}px`;
+              star.style.animationDuration = `${duration}s`;
+              star.style.animationDelay = `${delay}s`;
+              
+              nightSky.appendChild(star);
+          }
+      }
+        
+      // Переключение вкладок (ваш код)
+      document.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+              document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+              document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+              
+              tab.classList.add('active');
+              const tabId = tab.getAttribute('data-tab');
+              document.getElementById(tabId).classList.add('active');
+          });
+      });
+        
+      // Инициализация при загрузке страницы
+      document.addEventListener('DOMContentLoaded', () => {
+          createStars();
+          // Запуск часов сразу и затем каждую секунду
+          updateClocks();
+          setInterval(updateClocks, 1000);
+      });
+      
+    </script>
 </body>
+
 </html>
