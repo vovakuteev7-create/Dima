@@ -1,245 +1,257 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой дипломный проект</title>
+    <title>Дипломная работа: Telegram-бот на Python</title>
     <style>
-        /* ... (весь ваш CSS остался без изменений) ... */
-
-        /* Стили для времени */
-        .time-display {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
         }
-        .city-time {
-            color: #a8d0ff;
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1, h2 {
+            color: #2c3e50; /* Темно-синий */
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #3498db; /* Синяя линия */
+            padding-bottom: 15px;
+        }
+
+        .header-block {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-block h2 {
+            margin-top: 5px;
+            font-size: 1.4em;
+            color: #7f8c8d; /* Серый */
+        }
+
+        .header-block .title {
+            font-size: 1.8em;
             font-weight: bold;
         }
 
-        /* Стили для кнопки меню и списка ссылок */
-        .menu-toggle {
-            display: none; /* Скрыто по умолчанию */
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: white;
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        .header-block .author {
+            margin-top: 30px;
         }
 
-        .links-list {
-            display: flex; /* По умолчанию горизонтально */
-            gap: 15px;
-            margin-top: 10px;
+        .toc {
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
         }
 
-        /* Для мобильных устройств */
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #3498db; /* Синий */
+            font-weight: 500;
+        }
+
+        .content {
+            margin-top: 40px;
+        }
+
+        .content h2 {
+            border-left: 4px solid #3498db; /* Визуальное выделение разделов */
+            padding-left: 10px;
+        }
+
+        ul.tasks {
+            list-style-type: disc;
+            margin-left: 25px;
+        }
+
+        pre.code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto; /* Прокрутка для кода */
+        }
+
+        pre.code-block code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block; /* Показываем кнопку на моб. устройствах */
-            }
-
-            .links-list {
-                display: none; /* Скрываем список */
-                flex-direction: column;
-                width: 100%;
-                position: absolute;
-                top: 80px; /* Позиция под шапкой */
-                right: 20px;
-                background: rgba(10, 10, 42, 0.9);
-                padding: 15px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            }
-
-            .links-list.active {
-                display: flex; /* Показываем при активации */
-            }
-
-            .tool-link {
-                width: 100%;
-                text-align: left;
-                margin-bottom: 10px;
-            }
-        }
+             body { padding: 10px; font-size: 14px; }
+             .container { padding: 20px; margin: 10px auto; max-width: 95%; box-shadow:none; border-radius:5px; border:1px solid #ddd; background-color:transparent; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); padding-bottom:40px; position:relative; min-height: calc(100vh - 60px); overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:15px; margin-top:-20px; padding-top:calc(20px + 40px);}
+             .toc { display:none; } /* Скрыть оглавление на моб. устройствах */
+             .header-block { text-align:left; }
+             /* Кнопка "Наверх" */
+             .back-to-top { display:none !important; position:fixed !important; bottom:20px !important; right:20px !important; z-index:9999 !important;}
+         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <!-- Фон ночного неба -->
-    <div class="night-sky" id="nightSky">
-        <div class="moon"></div>
-    </div>
-
     <div class="container">
-        <!-- Кнопка меню для мобильных -->
-        <button class="menu-toggle" onclick="toggleLinks()">☰</button>
         
-        <!-- Список ссылок -->
-        <div class="links-list" id="linksList">
-            <a href="https://github.com/vovakuteev7-create" target="_blank" class="tool-link github">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-            <a href="https://www.figma.com/" target="_blank" class="tool-link figma">
-                <i class="fab fa-figma"></i> Figma
-            </a>
-            <a href="https://jsitor.com/" target="_blank" class="tool-link jsitor">
-                <i class="fas fa-code"></i> JSitor
-            </a>
-            <a href="https://codepen.io/" target="_blank" class="tool-link codepen">
-                <i class="fab fa-codepen"></i> CodePen
-            </a>
-            <a href="https://stackblitz.com/" target="_blank" class="tool-link stackblitz">
-                <i class="fas fa-bolt"></i> StackBlitz
-            </a>
-            <a href="https://vovakuteev7-create.github.io/home-arenda/#houses" target="_blank" class="tool-link jsitor">
-                <i class="fas fa-home"></i> Сайт по аренде
-            </a>
-        </div>
+        <!-- ТИТУЛЬНЫЙ ЛИСТ -->
+        <div class="header-block">
+           <h2>МИНИСТЕРСТВО ОБРАЗОВАНИЯ И НАУКИ<br>
+           УСТЬ-ИЛИМСКИЙ ФИЛИАЛ НОВОСИБИРСКОЙ<br>
+           «АКАДЕМИИ ДИЗАЙНА И ПРОГРАММИРОВАНИЯ»</h2>
+           <h2>Технический факультет</h2>
+           <div class="title">Выпускная дипломная работа<br>
+           «Разработка Telegram-бота на языке Python»<br>
+           по направлению<br>
+           <strong>09.03.03 «Информатика и вычислительная техника»</strong></div>
+           <div class="author">
+               <p>Работу выполнила:<br> Студент Цыдыпова А.С.</p>
+               <p>Научный руководитель:<br> Преподаватель технического факультета Колосов А. Н.</p>
+               <p style="margin-top:30px;">Усть-Илимск <span style="float:right;">2025</span></p>
+           </div>
+       </div>
 
-        <header>
-            <h1>Моя дипломная презентация</h1>
-            <p class="subtitle">Итоги моего обучения и достижения</p>
+       <!-- ОГЛАВЛЕНИЕ -->
+       <div class="toc">
+           <h2>Оглавление</h2>
+           <ul>
+               <li><a href="#introduction">Введение</a></li>
+               <li><a href="#theory">Основная теоретическая часть</a></li>
+               <li><a href="#practice">Основная практическая часть</a></li>
+               <li><a href="#design">Технический дизайн-документ</a></li>
+               <li><a href="#difficulties">Трудности</a></li>
+               <li><a href="#conclusion">Вывод / Заключение</a></li>
+           </ul>
+       </div>
 
-            <!-- Ссылки на инструменты (теперь управляются кнопкой) -->
-            <div class="tools-links">
-                <!-- Ссылки перенесены в #linksList -->
-            </div>
-        </header>
+       <!-- СОДЕРЖАНИЕ РАБОТЫ -->
+       <div class="content">
 
-        <!-- Вкладки -->
-        <div class="tabs">
-            <div class="tab active" data-tab="about">Обо мне</div>
-            <div class="tab" data-tab="works">Мои работы</div>
-            <div class="tab" data-tab="goodbye">Завершение</div>
-        </div>
+           <!-- ВВЕДЕНИЕ -->
+           <h2 id="introduction">Введение</h2>
+           <p>В качестве дипломного проекта я решила создать telegram-бота с множеством различных функций на языке программирования Python. Telegram-бот — это программа-робот, который работает на основе алгоритмов и может выполнять различные функции... (текст из вашего файла)</p>
 
-        <!-- Содержимое вкладок -->
-        <div class="tab-content active" id="about">
-            <!-- ... (содержимое "Обо мне" без изменений) ... -->
-        </div>
+           <!-- АКТУАЛЬНОСТЬ -->
+           <h3>1. Актуальность</h3>
+           <p>Актуальность проекта обусловлена растущим спросом на автоматизацию рутинных процессов... (текст из вашего файла)</p>
 
-        <div class="tab-content" id="works">
-            <h2>Мои проекты</h2>
-            
-            <!-- Блок с временем -->
-            <div class="time-display">
-                <div class="city-time" id="moscowTime">Загрузка времени...</div>
-                <div class="city-time" id="ustIlimskTime">Загрузка времени...</div>
-            </div>
+           <!-- ТЕОРЕТИЧЕСКАЯ ЧАСТЬ -->
+           <h2 id="theory">Основная теоретическая часть</h2>
+           
+           <h3>Основные возможности Pycharm Community</h3>
+           <p>(Текст о PyCharm)</p>
+           
+           <h3>Список использованных библиотек</h3>
+           <p>(Текст о библиотеках)</p>
+           
+           <!-- Пример блока с кодом -->
+           <pre class="code-block"><code>pip install python-telegram-bot
+pip install deep-translator
+pip install requests
+pip install aiogram</code></pre>
 
-            <div class="works-grid">
-                <div class="work-item">
-                    <h3>Мой сайт по аренде домов</h3>
-                    <p><a href="https://vovakuteev7-create.github.io/home-arenda/#houses" target="_blank">Перейти на сайт</a></p>
-                </div>
-                <div class="work-item">
-                    <h3>Проекты на Figma</h3>
-                    <p>Создание дизайн-макетов и прототипов для различных веб-приложений и сайтов.</p>
-                </div>
-                <div class="work-item">
-                    <h3>Работы на JSitor</h3>
-                    <p>Быстрое прототипирование и тестирование кода в онлайн-редакторе.</p>
-                </div>
-                <div class="work-item">
-                    <h3>Проекты на CodePen</h3>
-                    <p>Создание интерактивных примеров кода и мини-проектов для демонстрации навыков.</p>
-                </div>
-                <div class="work-item">
-                    <h3>Проекты на StackBlitz</h3>
-                    <p>Разработка интерактивных веб-приложений с использованием современных технологий.</p>
-                </div>
-            </div>
-        </div>
+           <!-- ПРАКТИЧЕСКАЯ ЧАСТЬ -->
+           <h2 id="practice">Основная практическая часть</h2>
+           
+           <h3>Создание своего собственного telegram-бота</h3>
+           <p>(Текст про BotFather и токен)</p>
+           
+           <!-- Блок с функциями бота (Сетка) -->
+           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin-top: 25px;">
+               
+               <!-- Калькулятор -->
+               <div style="background:#ecf0f1; padding:15px; border-radius:8px;">
+                   <h4 style="color:#e74c3c;">Функция калькулятора</h4>
+                   <p>(Описание функции калькулятора)</p>
+                   <pre class="code-block"><code># Пример простого вычисления
+try:
+    result = eval(user_input)
+except ZeroDivisionError:
+    result = "Ошибка! Деление на ноль."</code></pre>
+               </div>
+               
+               <!-- Прогноз погоды -->
+               <div style="background:#ecf0f1; padding:15px; border-radius:8px;">
+                   <h4 style="color:#e74c3c;">Функция прогноза погоды</h4>
+                   <p>(Описание функции погоды)</p>
+                   <pre class="code-block"><code>import requests
 
-        <div class="tab-content" id="goodbye">
-            <!-- ... (содержимое "Завершение" без изменений) ... -->
-        </div>
-    </div>
+city = user_input_city
+api_key = "ВАШ_API_KEY"
+url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+response = requests.get(url)
+data = response.json()</code></pre>
+               </div>
+               
+               <!-- Нейросеть -->
+               <div style="background:#ecf0f1; padding:15px; border-radius:8px;">
+                   <h4 style="color:#e74c3c;">Функция поддержки нейросети</h4>
+                   <p>(Описание функции нейросети)</p>
+                   <pre class="code-block"><code>import requests
 
-    <script>
-        // Функция для переключения списка ссылок
-        function toggleLinks() {
-            const list = document.getElementById('linksList');
-            list.classList.toggle('active');
-        }
+url = "https://developers.sber.ru/api/v1/gigachat/chat"
+headers = {"Authorization": f"Bearer {GIGACHAT_API_KEY}"}
+payload = {"query": user_question}
+response = requests.post(url, json=payload, headers=headers)
+answer = response.json().get('answer')</code></pre>
+               </div>
+               
+           </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><!-- ДИЗАЙН-ДОКУМЕНТ -->
+           <h2 id="design">Технический дизайн-документ</h2>
+           <p>(Текст из раздела "Общая информация")</p>
 
-        // Функция для получения времени по часовому поясу
-        function getLocalTime(timezone) {
-            try {
-                return new Date().toLocaleString("ru-RU", {
-                    timeZone: timezone,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-            } catch (e) {
-                return "Ошибка";
-            }
-        }
-
-        // Обновление времени каждую секунду
-        function updateClocks() {
-            document.getElementById('moscowTime').textContent = `Москва: ${getLocalTime('Europe/Moscow')}`;
-            document.getElementById('ustIlimskTime').textContent = `Усть-Илимск: ${getLocalTime('Asia/Irkutsk')}`;
-        }
-        
-        // Создание звездного неба (ваш код)
-        function createStars() {
-          const nightSky = document.getElementById('nightSky');
-          const starCount = 150;
-          
-          for (let i = 0; i < starCount; i++) {
-              const star = document.createElement('div');
-              star.classList.add('star');
-              
-              const x = Math.random() * 100;
-              const y = Math.random() * 100;
-              const size = Math.random() * 3 + 1;
-              const duration = Math.random() * 5 + 3;
-              const delay = Math.random() * 5;
-              
-              star.style.left = `${x}%`;
-              star.style.top = `${y}%`;
-              star.style.width = `${size}px`;
-              star.style.height = `${size}px`;
-              star.style.animationDuration = `${duration}s`;
-              star.style.animationDelay = `${delay}s`;
-              
-              nightSky.appendChild(star);
+           <!-- ТРУДНОСТИ -->
+           <h2 id="difficulties">Трудности</h2>
+           <p>(Текст о проблемах с библиотеками и перспективах)</p><!-- ЗАКЛЮЧЕНИЕ -->
+           <h2 id="conclusion">ЗАКЛЮЧЕНИЕ</h2>
+           <p>(Текст заключения)</p><!-- КНОПКА "НАВЕРХ" (для мобильных устройств) -->
+   </div> <!-- /content -->
+   </div> <!-- /container -->
+   <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="
+       display:none;
+       position: fixed;
+       bottom: 20px;
+       right: 20px;
+       background-color:#3498db;
+       color:#fff !important;
+       border:none;
+       border-radius:50%;
+       width:50px;
+       height:50px;
+       font-size:1.2em;
+       cursor:pointer;
+       box-shadow:0 4px 8px rgba(0,0,0,0.2);
+   ">⇧</button>
+   <!-- Скрипт для показа кнопки "Наверх" при прокрутке -->
+   <script>
+       window.addEventListener('scroll', function() {
+          const btn = document.querySelector('.back-to-top');
+          if (window.scrollY > document.body.clientHeight / 2) {
+              btn.style.display = 'block';
+          } else {
+              btn.style.display = 'none';
           }
-      }
-        
-      // Переключение вкладок (ваш код)
-      document.querySelectorAll('.tab').forEach(tab => {
-          tab.addEventListener('click', () => {
-              document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-              document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-              
-              tab.classList.add('active');
-              const tabId = tab.getAttribute('data-tab');
-              document.getElementById(tabId).classList.add('active');
-          });
       });
-        
-      // Инициализация при загрузке страницы
-      document.addEventListener('DOMContentLoaded', () => {
-          createStars();
-          // Запуск часов сразу и затем каждую секунду
-          updateClocks();
-          setInterval(updateClocks, 1000);
-      });
-      
-    </script>
+   </script>
 </body>
-
 </html>
